@@ -4,7 +4,7 @@
     "cm_version": "",
     "cm_set_path": "",
     "cleanup_pause": "",
-    "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.4-alternate-amd64.iso",
+    "iso_url": "/Users/malcolm/Downloads/ubuntu-12.04.4-alternate-amd64.iso",
     "iso_checksum": "73a758a2353f21e3016be8135411342a605bccac"
   },
   "builders": [{
@@ -84,7 +84,23 @@
       ["modifyvm", "{{.Name}}", "--cpus", "1"]
     ]
   }],
-  "provisioners": [{
+  "provisioners": [
+  {
+    "type": "file",
+    "source": "/Users/malcolm/.ssh/id_rsa",
+    "destination": "/tmp/id_rsa"
+  },
+  {
+    "type": "file",
+    "source": "/Users/malcolm/.ssh/id_rsa.pub",
+    "destination": "/tmp/id_rsa.pub"
+  },
+  {
+    "type": "file",
+    "source": "/Users/malcolm/.ssh/id_rsa.pub",
+    "destination": "/tmp/authorized_key"
+  },
+  {
     "type": "shell",
     "environment_vars": [
       "CM={{user `cm`}}",
@@ -94,8 +110,13 @@
     ],
     "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
     "scripts": [
+      "script/hosts.sh",
+      "script/base.sh",
+      "script/apt.sh",
       "script/desktop.sh",
+      "script/pi.sh",
       "script/vagrant.sh",
+      "script/java.sh",
       "script/sshd.sh",
       "script/vmtool.sh",
       "script/cmtool.sh",
